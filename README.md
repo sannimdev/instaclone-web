@@ -1,5 +1,10 @@
 # Instaclone Web
 
+-   [ ] Router
+-   [ ] Authentication
+-   [ ] Arch.
+-   [ ] Styles
+
 ## 8.1 설치 라이브러리
 
 ```
