@@ -1,14 +1,24 @@
 import { useReactiveVar } from '@apollo/client';
-import { useState } from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
 import Home from './screens/Home';
 import Login from './screens/Login';
-import { isLoggedInVar } from './apollo';
+import { darkModeVar, isLoggedInVar } from './apollo';
+import { ThemeProvider } from 'styled-components';
+
+const lightTheme = {
+    fontColor: '#2c2c2c',
+    bgColor: 'lightgray',
+};
+const darkTheme = {
+    fontColor: 'lightgray',
+    bgColor: '#2c2c2c',
+};
 
 function App() {
     const isLoggedIn = useReactiveVar(isLoggedInVar);
+    const darkMode = useReactiveVar(darkModeVar);
     return (
-        <div>
+        <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
             <Router>
                 <Switch>
                     <Router path='/' exact>
@@ -20,7 +30,7 @@ function App() {
                     <Redirect to='/' />
                 </Switch>
             </Router>
-        </div>
+        </ThemeProvider>
     );
 }
 

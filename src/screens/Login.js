@@ -1,19 +1,20 @@
 import styled from 'styled-components';
-import { isLoggedInVar } from '../apollo';
+import { darkModeVar } from '../apollo';
 
 const Title = styled.h1`
-    color: blue;
+    color: ${(props) => props.theme.fontColor};
     font-size: 3rem;
 `;
 const Container = styled.div`
-    background-color: tomato;
+    background-color: ${(props) => props.theme.bgColor};
 `;
 
 const Login = () => {
     return (
         <Container>
             <Title>Login</Title>
-            <button onClick={() => isLoggedInVar(true)}>Log in now!</button>
+            <button onClick={() => darkModeVar(true)}>To dark</button>
+            <button onClick={() => darkModeVar(false)}>To Light</button>
         </Container>
     );
 };
