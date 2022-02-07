@@ -5,6 +5,9 @@
 -   [x] Arch.
 -   [x] Styles
 -   [ ] Log In / Sign Up
+-   [ ] Feed
+-   [ ] Profile
+-   [ ] See Hashtag
 
 ## 8.1 설치 라이브러리
 
