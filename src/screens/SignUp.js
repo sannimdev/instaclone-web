@@ -2,7 +2,7 @@ import { gql, useMutation } from '@apollo/client';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useForm } from 'react-hook-form';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import AuthLayout from '../components/auth/AuthLayout';
 import BottomBox from '../components/auth/BottomBox';
@@ -12,7 +12,7 @@ import FormError from '../components/auth/FormError';
 import Input from '../components/auth/Input';
 import { FatLink } from '../components/auth/shared';
 import PageTitle from '../components/PageTitle';
-import routes from '../routs';
+import routes from '../routes';
 
 const HeaderContainer = styled.div`
     display: flex;
@@ -48,18 +48,19 @@ const CREATE_ACCOUNT_MUTATION = gql`
 `;
 
 function SignUp() {
-    const history = useHistory();
+    const navigate = useNavigate();
     const onCompleted = (data) => {
+        const { username, password } = getValues();
         const {
-            createAccount: { ok, error },
+            createAccount: { ok },
         } = data;
         if (!ok) {
             return;
         }
-        history.push(routes.home);
+        navigate(routes.home, { state: { message: 'Account created. Please log in.', username, password } });
     };
+    const { register, handleSubmit, errors, formState, getValues } = useForm({ mode: 'onChange' });
     const [createAccount, { loading }] = useMutation(CREATE_ACCOUNT_MUTATION, { onCompleted });
-    const { register, handleSubmit, errors, formState } = useForm({ mode: 'onChange' });
     const onSubmitValid = (data) => {
         // 검증에 통과한 입력 양식이 data로 넘어 온다
         if (loading) {
