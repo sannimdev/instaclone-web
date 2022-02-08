@@ -12,6 +12,7 @@ import PageTitle from '../components/PageTitle';
 import { useForm } from 'react-hook-form';
 import FormError from '../components/auth/FormError';
 import { gql, useMutation } from '@apollo/client';
+import { logUserIn } from '../apollo';
 
 const FacebookLogin = styled.div`
     color: #385285;
@@ -32,14 +33,18 @@ const LOGIN_MUTATION = gql`
 `;
 
 const Login = () => {
-    const { register, handleSubmit, watch, formState, getValues, setError } = useForm({ mode: 'onChange' });
+    const { register, handleSubmit, watch, formState, getValues, setError, clearErrors } = useForm({
+        mode: 'onChange',
+    });
+    watch();
     const onCompleted = (data) => {
         const {
             login: { ok, error, token },
         } = data;
         if (!ok) {
-            setError('result', { message: error });
+            return setError('result', { message: error });
         }
+        if (token) logUserIn(token);
     };
     const [login, { loading }] = useMutation(LOGIN_MUTATION, { onCompleted });
     const onSubmitValid = (data) => {
@@ -53,7 +58,10 @@ const Login = () => {
     //     console.log(data, 'invalid');
     // };
     const { errors } = formState;
-    watch();
+    const clearLoginError = () => {
+        clearErrors('result');
+    };
+
     return (
         <AuthLayout>
             <PageTitle title="Log in" />
@@ -72,6 +80,7 @@ const Login = () => {
                             // pattern 정규표현식
                             // validate: (currentValue) => currentValue.includes('potato'),
                         })}
+                        onFocus={clearLoginError}
                         type="text"
                         placeholder="Username"
                         hasError={Boolean(errors?.username?.message)}
@@ -79,6 +88,7 @@ const Login = () => {
                     <FormError message={errors?.username?.message} />
                     <Input
                         {...register('password', { required: 'Password is required' })}
+                        onFocus={clearLoginError}
                         type="password"
                         placeholder="Password"
                         hasError={Boolean(errors?.password?.message)}
