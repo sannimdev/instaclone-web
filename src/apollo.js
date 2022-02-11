@@ -27,6 +27,10 @@ export const disableDarkMode = () => {
 };
 
 export const client = new ApolloClient({
-    uri: 'http://localhost:4000/graphql',
+    uri:
+        process.env.NODE_ENV === 'production'
+            ? 'https://instaclone-backend-2022.herokuapp.com/graphql'
+            : 'http://localhost:4000/graphql',
     cache: new InMemoryCache(),
+    credentials: 'include',
 });
