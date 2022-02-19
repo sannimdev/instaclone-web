@@ -72,6 +72,7 @@ function Photo({ id, user, file, isLiked, likes }) {
         variables: {
             id,
         },
+        // refetchQueries: [{ query: FEED_QUERY }], 전체 쿼리를 가져오기 때문에 좋은 방법은 아님
     });
     return (
         <PhotoContainer key={id}>
