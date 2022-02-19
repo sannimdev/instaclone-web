@@ -10,7 +10,7 @@ import Button from '../components/auth/Button';
 import FormBox from '../components/auth/FormBox';
 import FormError from '../components/auth/FormError';
 import Input from '../components/auth/Input';
-import { FatLink } from '../components/auth/shared';
+import { FatLink } from '../components/shared';
 import PageTitle from '../components/PageTitle';
 import routes from '../routes';
 
