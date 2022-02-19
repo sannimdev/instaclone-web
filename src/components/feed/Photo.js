@@ -81,10 +81,12 @@ function Photo({ id, user, file, isLiked, likes }) {
                 fragment: gql`
                     fragment BullShitName on Photo {
                         isLiked
+                        likes
                     }
                 `,
                 data: {
                     isLiked: !isLiked,
+                    likes: isLiked ? likes - 1 : likes + 1,
                 },
             });
         }
