@@ -60,7 +60,7 @@ function Header() {
                     <FontAwesomeIcon icon={faInstagram} size="2x" />
                 </Column>
                 <Column>
-                    {!isLoggedIn ? (
+                    {isLoggedIn ? (
                         <>
                             <Icon>
                                 <FontAwesomeIcon icon={faHome} size="lg" />
