@@ -68,11 +68,33 @@ const TOGGLE_LIKE_MUTATION = gql`
 `;
 
 function Photo({ id, user, file, isLiked, likes }) {
+    const updateToggleLike = (cache, result) => {
+        const {
+            data: {
+                toggleLike: { ok },
+            },
+        } = result;
+        if (ok) {
+            // console.log('now its time to update the cache pls.');
+            cache.writeFragment({
+                id: `Photo:${id}`,
+                fragment: gql`
+                    fragment BullShitName on Photo {
+                        isLiked
+                    }
+                `,
+                data: {
+                    isLiked: !isLiked,
+                },
+            });
+        }
+    };
     const [toggleLikeMutation, { loading }] = useMutation(TOGGLE_LIKE_MUTATION, {
         variables: {
             id,
         },
         // refetchQueries: [{ query: FEED_QUERY }], 전체 쿼리를 가져오기 때문에 좋은 방법은 아님
+        update: updateToggleLike,
     });
     return (
         <PhotoContainer key={id}>
