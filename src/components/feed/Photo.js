@@ -8,6 +8,7 @@ import Avatar from '../../components/Avatar';
 import { FatText } from '../../components/shared';
 import { gql, useMutation } from '@apollo/client';
 import Comments from './Comments';
+import { Link } from 'react-router-dom';
 
 const PhotoContainer = styled.div`
     background-color: white;
@@ -126,7 +127,12 @@ function Photo({ id, user, file, isLiked, likes, caption, commentNumber, comment
     return (
         <PhotoContainer key={id}>
             <PhotoHeader>
-                <Avatar lg url={user.avatar} /> <Username>{user.username}</Username>
+                <Link to={`/users/${user.username}`}>
+                    <Avatar lg url={user.avatar} />
+                </Link>
+                <Link to={`/users/${user.username}`}>
+                    <Username>{user.username}</Username>
+                </Link>
             </PhotoHeader>
             <PhotoFile src={file} />
             <PhotoData>
