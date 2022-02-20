@@ -29,7 +29,7 @@ const CommentCaption = styled.span`
     }
 `;
 
-function Comment({ id, author, payload = '', isMine }) {
+function Comment({ id, photoId, author, payload = '', isMine }) {
     const updateDeleteComment = (cache, result) => {
         const {
             data: {
@@ -38,6 +38,12 @@ function Comment({ id, author, payload = '', isMine }) {
         } = result;
         if (ok) {
             cache.evict({ id: `Comment:${id}` });
+            cache.modify({
+                id: `Photo:${photoId}`,
+                fields: {
+                    commentNumber: (prev) => prev - 1,
+                },
+            });
         }
     };
     const [deleteCommentMutation] = useMutation(DELETE_COMMENT_MUTATION, {
@@ -74,6 +80,7 @@ function Comment({ id, author, payload = '', isMine }) {
 // 인스타에서는 자신의 작성글도 댓글처럼 보임
 Comment.propTypes = {
     id: PropTypes.number,
+    photoId: PropTypes.number.isRequired,
     author: PropTypes.string.isRequired,
     payload: PropTypes.string.isRequired,
     isMine: PropTypes.bool,
