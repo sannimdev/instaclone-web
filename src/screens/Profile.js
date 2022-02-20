@@ -5,6 +5,23 @@ import { faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { FatText } from '../components/shared';
+import Button from '../components/auth/Button';
+import PageTitle from '../components/PageTitle';
+
+const FOLLOW_USER_MUTATION = gql`
+    mutation followUser($username: STring!) {
+        followUser(username: $username) {
+            ok
+        }
+    }
+`;
+const UNFOLLOW_USER_MUTATION = gql`
+    mutation followUser($username: STring!) {
+        unfollowUser(username: $username) {
+            ok
+        }
+    }
+`;
 
 // seeProfile에서 id값은 캐싱 시 중요한 식별 수단이다.
 // id 대신 다른 식별 수단을 사용하려면 apollo cache 다음의 문서를 참고한다. (keyFields)
@@ -28,6 +45,7 @@ const SEE_PROFILE_QUERY = gql`
     }
     ${PHOTO_FRAGMENT}
 `;
+
 const Header = styled.div`
     display: flex;
 `;
@@ -47,6 +65,7 @@ const Username = styled.h3`
 const Row = styled.div`
     margin-bottom: 20px;
     font-size: 16px;
+    display: flex;
 `;
 const List = styled.ul`
     display: flex;
@@ -101,21 +120,43 @@ const Icon = styled.span`
     }
 `;
 
+const ProfileBtn = styled(Button).attrs({
+    as: 'span',
+})`
+    margin-left: 10px;
+    margin-top: 0;
+    cursor: pointer;
+`;
+
 function Profile() {
     const { username } = useParams();
-    const { data } = useQuery(SEE_PROFILE_QUERY, {
+    const { data, loading } = useQuery(SEE_PROFILE_QUERY, {
         variables: {
             username,
         },
     });
 
+    const getButton = (seeProfile) => {
+        const { isMe, isFollowing } = seeProfile;
+        if (isMe) {
+            return <ProfileBtn>Edit Profile</ProfileBtn>;
+        }
+        if (isFollowing) {
+            return <ProfileBtn>Unfollow</ProfileBtn>;
+        } else {
+            return <ProfileBtn>Follow</ProfileBtn>;
+        }
+    };
+
     return (
         <div>
+            <PageTitle title={loading ? 'Loading...' : `${data?.seeProfile?.username}'s Profile`} />
             <Header>
                 <Avatar src={data?.seeProfile?.avatar} />
                 <Column>
                     <Row>
                         <Username>{data?.seeProfile?.username}</Username>
+                        {data?.seeProfile ? getButton(data.seeProfile) : null}
                     </Row>
                     <Row>
                         <List>
@@ -134,7 +175,6 @@ function Profile() {
                     <Row>
                         <Name>
                             {data?.seeProfile?.firstName}
-                            {'  '}
                             {data?.seeProfile?.lastName}
                         </Name>
                     </Row>
