@@ -36,7 +36,14 @@ function App() {
                                     )
                                 }
                             />
-                            <Route path={`/users/:username`} element={<Profile />} />
+                            <Route
+                                path={`/users/:username`}
+                                element={
+                                    <Layout>
+                                        <Profile />
+                                    </Layout>
+                                }
+                            />
                             {!isLoggedIn && <Route path={routes.signUp} element={<SignUp />} />}
                         </Routes>
                     </Router>
