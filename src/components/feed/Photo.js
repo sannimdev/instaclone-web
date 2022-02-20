@@ -76,29 +76,42 @@ function Photo({ id, user, file, isLiked, likes, caption, commentNumber, comment
             },
         } = result;
         if (ok) {
-            const fragmentId = `Photo:${id}`;
-            const fragment = gql`
-                fragment BullShitName on Photo {
-                    isLiked
-                    likes
-                }
-            `;
-            const result = cache.readFragment({
-                id: fragmentId,
-                fragment,
-            });
-            if ('isLiked' in result && 'likes' in result) {
-                const { isLiked: cacheIsLiked, likes: cacheLIkes } = result;
-                // console.log('We got what we wanted');
-                cache.writeFragment({
-                    id: fragmentId,
-                    fragment,
-                    data: {
-                        isLiked: !cacheIsLiked,
-                        likes: cacheIsLiked ? cacheLIkes - 1 : cacheLIkes + 1,
+            // apollo client3 부터 가능
+            const photoId = `Photo:${id}`;
+            cache.modify({
+                id: photoId,
+                fields: {
+                    isLiked(prev) {
+                        return !prev;
                     },
-                });
-            }
+                    likes(prev) {
+                        return isLiked ? prev - 1 : prev + 1;
+                    },
+                },
+            });
+            // const fragmentId = `Photo:${id}`;
+            // const fragment = gql`
+            //     fragment BullShitName on Photo {
+            //         isLiked
+            //         likes
+            //     }
+            // `;
+            // const result = cache.readFragment({
+            //     id: fragmentId,
+            //     fragment,
+            // });
+            // if ('isLiked' in result && 'likes' in result) {
+            //     const { isLiked: cacheIsLiked, likes: cacheLIkes } = result;
+            //     // console.log('We got what we wanted');
+            //     cache.writeFragment({
+            //         id: fragmentId,
+            //         fragment,
+            //         data: {
+            //             isLiked: !cacheIsLiked,
+            //             likes: cacheIsLiked ? cacheLIkes - 1 : cacheLIkes + 1,
+            //         },
+            //     });
+            // }
             // console.log(result);
             // console.log('now its time to update the cache pls.');
         }
