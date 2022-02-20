@@ -42,6 +42,7 @@ function Home() {
                     id={photo.id}
                     user={photo.user}
                     file={photo.file}
+                    caption={photo.caption}
                     isLiked={photo.isLiked}
                     likes={photo.likes}
                     comments={photo.comments}
