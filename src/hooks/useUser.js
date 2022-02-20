@@ -2,11 +2,14 @@ import { useEffect } from 'react';
 import { gql, useQuery, useReactiveVar } from '@apollo/client';
 import { isLoggedInVar, logUserOut } from '../apollo';
 
-const ME_QUERY = gql`
+export const ME_QUERY = gql`
     query me {
         me {
+            id
             username
             avatar
+            totalFollowing
+            totalFollwers
         }
     }
 `;
