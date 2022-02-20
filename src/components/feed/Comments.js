@@ -16,7 +16,6 @@ const CommentCount = styled.span`
 function Comments({ author, caption, commentNumber, comments }) {
     return (
         <CommentsContainer>
-            <Comment author={author} payload={caption} />
             <CommentCount>{commentNumber === 1 ? '1 comment' : `${commentNumber} comments`}</CommentCount>
             {comments?.map((comment) => (
                 <Comment key={comment.id} author={comment.user.username} payload={comment.payload} />
