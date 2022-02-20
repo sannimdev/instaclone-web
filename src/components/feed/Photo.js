@@ -150,7 +150,13 @@ function Photo({ id, user, file, isLiked, likes, caption, commentNumber, comment
                     </div>
                 </PhotoActions>
                 <Likes>{likes === 1 ? '1 like' : `${likes} likes`}</Likes>
-                <Comments author={user.username} caption={caption} commentNumber={commentNumber} comments={comments} />
+                <Comments
+                    photoId={id}
+                    author={user.username}
+                    caption={caption}
+                    commentNumber={commentNumber}
+                    comments={comments}
+                />
             </PhotoData>
         </PhotoContainer>
     );
