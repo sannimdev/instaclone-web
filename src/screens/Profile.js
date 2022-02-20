@@ -3,10 +3,11 @@ import { useParams } from 'react-router-dom';
 import { PHOTO_FRAGMENT } from '../fragments';
 
 // seeProfile에서 id값은 캐싱 시 중요한 식별 수단이다.
+// id 대신 다른 식별 수단을 사용하려면 apollo cache 다음의 문서를 참고한다. (keyFields)
+// https://www.apollographql.com/docs/react/caching/cache-configuration/
 const SEE_PROFILE_QUERY = gql`
     query seeProfile($username: String!) {
         seeProfile(username: $username) {
-            id
             firstName
             lastName
             username
